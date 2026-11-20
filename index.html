@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TunjukinBasa-AI — Full-Screen Sensorik BISINDO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #030712;
+      color: #f8fafc;
+    }
+    .mirror {
+      transform: scaleX(-1);
+    }
+    .sensor-grid {
+      background-image: 
+        linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+    @keyframes scanline {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+    .scanline {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.75), transparent);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.9);
+      animation: scanline 4s linear infinite;
+      pointer-events: none;
+      z-index: 15;
+    }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
+  </style>
+</head>
+<body class="relative w-screen h-screen overflow-hidden select-none">
+
+  <!-- FULLSCREEN CAMERA & SENSOR LAYER (100VW x 100VH) -->
+  <div id="fullscreenViewport" class="fixed inset-0 w-screen h-screen bg-slate-950 sensor-grid flex items-center justify-center z-0">
+    <!-- Live Webcam Video Fullscreen -->
+    <video id="webcamVideo" class="absolute inset-0 w-full h-full object-cover mirror hidden" playsinline autoplay muted></video>
+    
+    <!-- Biometric MediaPipe & Sensor Overlay Canvas Fullscreen -->
+    <canvas id="sensorCanvas" class="absolute inset-0 w-full h-full object-cover z-10"></canvas>
+    
+    <!-- Laser Scanline -->
+    <div class="scan
